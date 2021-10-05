@@ -1,0 +1,57 @@
+{
+  "name": "m-h-1/cron-bundle",
+  "description": "",
+  "type": "symfony-bundle",
+  "require": {
+    "php": "^7.1|^8.0",
+    "symfony/framework-bundle": "^5.1",
+    "symfony/console": "^5.1",
+    "symfony/yaml": "^5.1",
+    "doctrine/orm": "^2.6",
+    "ramsey/uuid-doctrine": "^1.6",
+    "dragonmantank/cron-expression": "^3.1",
+    "symfony/process": "^5.1",
+    "symfony/lock": "^5.1"
+  },
+  "require-dev": {
+    "symfony/phpunit-bridge": "^5.1",
+    "phpstan/phpstan": "^0.12.86",
+    "squizlabs/php_codesniffer": "^3.5"
+  },
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "m-h-1",
+      "email": "contact@hoefges.net"
+    }
+  ],
+  "conflict": {
+    "symfony/symfony": "*"
+  },
+  "extra": {
+    "symfony": {
+      "allow-contrib": false,
+      "require": "5.*"
+    }
+  },
+  "scripts": {
+    "auto-scripts": {
+      "cache:clear": "symfony-cmd",
+      "assets:install %PUBLIC_DIR%": "symfony-cmd"
+    },
+    "test": "vendor/bin/simple-phpunit",
+    "test-coverage": "vendor/bin/simple-phpunit --coverage-clover clover.xml --coverage-text",
+    "phpstan": "vendor/bin/phpstan analyse",
+    "phpcs": "vendor/bin/phpcs"
+  },
+  "autoload": {
+    "psr-4": {
+      "MH1\\CronBundle\\": "src/"
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "MH1\\CronBundle\\Tests\\": "tests/"
+    }
+  }
+}

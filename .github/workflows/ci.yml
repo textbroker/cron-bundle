@@ -1,0 +1,86 @@
+name: CI
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ '**' ]
+
+jobs:
+  quality:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: 7.3
+
+      - name: Cache Composer packages
+        id: composer-cache
+        uses: actions/cache@v2
+        with:
+          path: vendor
+          key: php-7.3
+          restore-keys: php-7.3
+
+      - name: Install dependencies
+        run: composer install --no-progress
+
+      - name: Run phpcs
+        run: composer run-script phpcs
+
+      - name: Run phpstan
+        run: composer run-script phpstan
+
+      - name: Run test suite
+        run: composer run-script test-coverage
+
+      - name: phpunit-coverage-badge
+        uses: timkrase/phpunit-coverage-badge@v1.2.0
+        with:
+          repo_token: "${{ secrets.GITHUB_TOKEN }}"
+          push_badge: true
+          coverage_badge_path: docs/coverage_badge.svg
+
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        php-versions: [ '7.2', '7.3', '7.4', '8.0' ]
+        composer-modifier: [ '--prefer-lowest', '--prefer-stable', '' ]
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Cache Composer packages
+        id: composer-cache
+        uses: actions/cache@v2
+        with:
+          path: vendor
+          key: php-${{ matrix.php-versions }}${{ matrix.composer-modifier }}
+          restore-keys: php-${{ matrix.php-versions }}${{ matrix.composer-modifier }}
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php-versions }}
+
+      - name: Install dependencies
+        run: composer install --no-progress
+
+      - name: Update dependencies
+        run: composer update --no-progress ${{ matrix.composer-modifier }}
+        if: matrix.composer-modifier != ''
+
+      - name: Run test suite
+        run: composer run-script test
+        if: matrix.composer-modifier != '--prefer-lowest'
+
+      - name: Run test suite without deprecation warning
+        run: SYMFONY_DEPRECATIONS_HELPER='quiet[]=indirect' composer run-script test
+        if: matrix.composer-modifier == '--prefer-lowest'

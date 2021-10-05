@@ -1,0 +1,27 @@
+# config/services.yaml
+services:
+  # default configuration for services in *this* file
+  _defaults:
+    autowire: true      # Automatically injects dependencies in your services.
+    autoconfigure: true # Automatically registers your services as commands, event subscribers, etc.
+
+  # makes classes in src/ available to be used as services
+  # this creates a service per class whose id is the fully-qualified class name
+  MH1\CronBundle\:
+    resource: '../src/*'
+    exclude: '../src/{DependencyInjection,Entity,Tests}'
+
+  mh1.cronjob.log.service:
+    class: '%cronjob.log.service%'
+
+  mh1.cronjob.service:
+    class: '%cronjob.service%'
+    arguments:
+      $consolePath: '%kernel.project_dir%/bin/console'
+      $cronJobLogService: '@mh1.cronjob.log.service'
+      $checkInterval: '%cronjob.check_interval%'
+      $executionTimeZone: '%cronjob.execution_time_zone%'
+
+  MH1\CronBundle\Command\CronRunCommand:
+    arguments:
+      $cronJobService: '@mh1.cronjob.service'

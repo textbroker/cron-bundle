@@ -1,0 +1,12 @@
+doctrine:
+  dbal:
+    types:
+      uuid: 'Ramsey\Uuid\Doctrine\UuidType'
+
+  orm:
+    mappings:
+      MH1CronBundle:
+        dir: '%kernel.project_dir%/vendor/m-h-1/cron-bundle/src/Entity'
+        type: annotation
+        prefix: MH1\CronBundle\Entity
+        is_bundle: false
