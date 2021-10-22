@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace MH1\CronBundle\Command;
 
-use Psr\Log\LoggerInterface;
+use MH1\CronBundle\Service\CronCommandHelperServiceInterface;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Command\LockableTrait;
 use Symfony\Component\Console\Input\InputInterface;
@@ -18,18 +18,18 @@ abstract class AbstractCronCommand extends Command
     use LockableTrait;
 
     /**
-     * @var LoggerInterface
+     * @var CronCommandHelperServiceInterface
      */
-    protected $logger;
+    protected $helperService;
 
     /**
-     * @param LoggerInterface $logger
-     * @param string|null     $name
+     * @param CronCommandHelperServiceInterface $helperService
+     * @param string|null                       $name
      */
-    public function __construct(LoggerInterface $logger, string $name = null)
+    public function __construct(CronCommandHelperServiceInterface $helperService, string $name = null)
     {
         parent::__construct($name);
-        $this->logger = $logger;
+        $this->helperService = $helperService;
     }
 
     /**
@@ -40,12 +40,13 @@ abstract class AbstractCronCommand extends Command
      */
     final protected function execute(InputInterface $input, OutputInterface $output): int
     {
+        $name = $this->getName() ?? '';
         // if command lock can be acquired => not running currently
-        if ($this->lock()) {
+        if ($this->lock($this->helperService->getLockName($name))) {
             return $this->executeCronCommand($input, $output);
         }
 
-        return $this->commandIsLocked($output);
+        return $this->helperService->commandIsLocked($output, $name);
     }
 
     /**
@@ -55,19 +56,4 @@ abstract class AbstractCronCommand extends Command
      * @return int
      */
     abstract protected function executeCronCommand(InputInterface $input, OutputInterface $output): int;
-
-    /**
-     * @param OutputInterface $output
-     *
-     * @return int
-     */
-    protected function commandIsLocked(OutputInterface $output): int
-    {
-        $output->writeln('The command is already running in another process.');
-
-        // log an error if the process is running longer than expected through the schedule
-        $this->logger->error($this->getName() . ': process running longer than expected');
-
-        return Command::SUCCESS;
-    }
 }

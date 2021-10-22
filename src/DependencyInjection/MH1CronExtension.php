@@ -48,6 +48,11 @@ class MH1CronExtension extends Extension implements PrependExtensionInterface
         if (isset($config['execution_time_zone'])) {
             $container->setParameter('cronjob.execution_time_zone', $config['execution_time_zone']);
         }
+
+        // overwrite parameter, if set
+        if (isset($config['lock_prefix'])) {
+            $container->setParameter('cronjob.lock_prefix', $config['lock_prefix']);
+        }
     }
 
     public function prepend(ContainerBuilder $container): void

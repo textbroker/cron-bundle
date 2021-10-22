@@ -25,3 +25,8 @@ services:
   MH1\CronBundle\Command\CronRunCommand:
     arguments:
       $cronJobService: '@mh1.cronjob.service'
+
+  MH1\CronBundle\Service\CronCommandHelperServiceInterface:
+    class: MH1\CronBundle\Service\CronCommandHelperService
+    arguments:
+      $lockPrefix: '%cronjob.lock_prefix%'

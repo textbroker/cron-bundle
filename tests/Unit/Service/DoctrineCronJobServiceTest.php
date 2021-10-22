@@ -38,7 +38,7 @@ class DoctrineCronJobServiceTest extends TestCase
             $cronJobLogServiceMock,
             $this->entityManagerMock,
             '',
-            1000000
+            1000
         );
     }
 
