@@ -17,10 +17,10 @@ class DateTimeHelper
         $timezone = new DateTimeZone('UTC');
         $format = 'Y-m-d H:i:s';
 
-        /** @noinspection PhpUnnecessaryLocalVariableInspection */
         /** @var DateTime $dateTimeObject */
-        $dateTimeObject = DateTime::createFromFormat($format, date($format), $timezone);
-        return $dateTimeObject;
+        $dateTimeObject = DateTime::createFromFormat($format, date($format));
+
+        return $dateTimeObject->setTimezone($timezone);
     }
 
     /**
@@ -31,9 +31,9 @@ class DateTimeHelper
         $timezone = new DateTimeZone('UTC');
         $format = 'Y-m-d H:i:s';
 
-        /** @noinspection PhpUnnecessaryLocalVariableInspection */
         /** @var DateTimeImmutable $dateTimeObject */
-        $dateTimeObject = DateTimeImmutable::createFromFormat($format, date($format), $timezone);
-        return $dateTimeObject;
+        $dateTimeObject = DateTimeImmutable::createFromFormat($format, date($format));
+
+        return $dateTimeObject->setTimezone($timezone);
     }
 }

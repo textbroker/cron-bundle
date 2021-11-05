@@ -6,6 +6,7 @@ namespace MH1\CronBundle\Tests\Unit\Service;
 use DateInterval;
 use DateTime;
 use DateTimeInterface;
+use DateTimeZone;
 use Doctrine\ORM\EntityManagerInterface;
 use MH1\CronBundle\Entity\Mh1CronJob;
 use MH1\CronBundle\Entity\Mh1CronJobReport;
@@ -30,15 +31,20 @@ class DoctrineCronJobServiceTest extends TestCase
      */
     private $service;
 
+    private $serverTimezone = 'America/New_York';
+    private $executionTimeZone = 'America/Los_Angeles';
+
     public function setUp(): void
     {
+        date_default_timezone_set($this->serverTimezone);
         $cronJobLogServiceMock = $this->createMock(CronJobLogServiceInterface::class);
         $this->entityManagerMock = $this->createMock(EntityManagerInterface::class);
         $this->service = new DoctrineCronJobService(
             $cronJobLogServiceMock,
             $this->entityManagerMock,
             '',
-            1000
+            1000,
+            $this->executionTimeZone
         );
     }
 
@@ -134,6 +140,7 @@ class DoctrineCronJobServiceTest extends TestCase
     public function provideGetScheduledJobs(): array
     {
         $dateTime = DateTimeHelper::getUTCDateTimeImmutable();
+        $dateTime = $dateTime->setTimezone(new DateTimeZone($this->executionTimeZone));
         $dateTimeAdd2 = $dateTime->add(new DateInterval('PT2H'));
         $dateTimeAdd4 = $dateTime->add(new DateInterval('PT4H'));
         $dateTimeAdd12 = $dateTime->add(new DateInterval('PT12H'));
