@@ -77,8 +77,9 @@ class DoctrineCronJobService extends AbstractCronJobService
         }
 
         $cron = new CronExpression($job->getSchedule());
+        $nextRunDate = $cron->getNextRunDate($lastExecution->getEndTime(), 0, false, $this->executionTimeZone);
 
         // check if the next runtime is before the current checking time
-        return $cron->getNextRunDate($lastExecution->getEndTime()) <= $dateTime;
+        return $nextRunDate <= $dateTime;
     }
 }

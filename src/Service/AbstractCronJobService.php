@@ -34,7 +34,7 @@ abstract class AbstractCronJobService implements CronJobServiceInterface
     /**
      * @var string
      */
-    private $executionTimeZone;
+    protected $executionTimeZone;
 
     /**
      * @param CronJobLogServiceInterface $cronJobLogService
