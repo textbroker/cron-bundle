@@ -18,16 +18,9 @@ class CronCommandHelperServiceTest extends TestCase
      */
     private $helperService;
 
-    /**
-     * @var MockObject|LoggerInterface
-     */
-    private $loggerMock;
-
     protected function setUp(): void
     {
-        $this->loggerMock = $this->createMock(LoggerInterface::class);
         $this->helperService = new CronCommandHelperService(
-            $this->loggerMock,
             self::LOCK_PREFIX
         );
     }
@@ -41,12 +34,6 @@ class CronCommandHelperServiceTest extends TestCase
         $output->expects(self::once())
                ->method('writeln')
                ->with('The command is already running in another process.')
-        ;
-
-        $this->loggerMock
-            ->expects(self::once())
-            ->method('error')
-            ->with(self::LOCK_PREFIX . $cronName . ': process running longer than expected')
         ;
 
         $this->helperService->commandIsLocked($output, $cronName);

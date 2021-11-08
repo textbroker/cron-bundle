@@ -50,6 +50,8 @@ class DoctrineCronJobLogServiceTest extends TestCase
         self::assertSame($startTime, $cronReport->getStartTime()->getTimestamp());
         self::assertSame($startTime + 5, $cronReport->getEndTime()->getTimestamp());
         self::assertSame(5, $cronReport->getDuration());
+        self::assertSame($exitCode, $cronReport->getExitCode());
+        self::assertSame($output, $cronReport->getOutput());
     }
 
     protected function setUp(): void
