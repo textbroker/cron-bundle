@@ -15,6 +15,8 @@ use Symfony\Component\Console\Output\OutputInterface;
  */
 abstract class AbstractCronCommand extends Command
 {
+    public const SKIPPED = 19;
+
     use LockableTrait;
 
     /**
