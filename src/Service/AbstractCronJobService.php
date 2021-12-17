@@ -37,18 +37,26 @@ abstract class AbstractCronJobService implements CronJobServiceInterface
     protected $executionTimeZone;
 
     /**
+     * @var string|null
+     */
+    private $phpExecutablePath;
+
+    /**
      * @param CronJobLogServiceInterface $cronJobLogService
      * @param string                     $consolePath       path to bin/console e.g. "/var/www/project/bin/console"
      * @param int                        $checkInterval     microseconds to wait between the check if a
      *                                                      process is running (must be greater than 10)
      * @param string|null                $executionTimeZone name of the timezone to check for the runtime
      *                                                      if null php default timezone is used
+     * @param string|null                $phpExecutablePath path to php executable e.g. /usr/local/php81/bin/php
+     *                                                      usefully if multiple PHP versions running on the same system
      */
     public function __construct(
         CronJobLogServiceInterface $cronJobLogService,
         string                     $consolePath,
         int                        $checkInterval,
-        ?string                    $executionTimeZone = null
+        ?string                    $executionTimeZone = null,
+        ?string                    $phpExecutablePath = null
     ) {
         if ($checkInterval <= 1) {
             throw new InvalidArgumentException(
@@ -60,6 +68,7 @@ abstract class AbstractCronJobService implements CronJobServiceInterface
         $this->consolePath = $consolePath;
         $this->checkInterval = $checkInterval * 1000;
         $this->executionTimeZone = $executionTimeZone ?? date_default_timezone_get();
+        $this->phpExecutablePath = $phpExecutablePath;
     }
 
     /**
@@ -72,10 +81,12 @@ abstract class AbstractCronJobService implements CronJobServiceInterface
         $processes = [];
         foreach ($cronJobs as $cronJob) {
             $log = $this->cronJobLogService->logStart($cronJob);
-            $process = new Process([$this->consolePath, $cronJob->getCommand()]);
+
+            /** @var Process<callable> $process */
+            $process = $this->createProcess($cronJob);
             try {
                 $process->start();
-            } catch (RuntimeException | LogicException $exception) {
+            } catch (RuntimeException|LogicException $exception) {
                 $this->cronJobLogService->logEnd($log, Command::FAILURE, $exception->getMessage());
                 continue;
             }
@@ -83,6 +94,24 @@ abstract class AbstractCronJobService implements CronJobServiceInterface
         }
 
         $this->checkRunning($processes);
+    }
+
+    /**
+     * @param CronJobInterface $cronJob
+     *
+     * @return Process
+     */
+    public function createProcess(CronJobInterface $cronJob): Process
+    {
+        $processParts = [];
+        if ($this->phpExecutablePath !== null && $this->phpExecutablePath !== '') {
+            $processParts[] = $this->phpExecutablePath;
+        }
+
+        $processParts[] = $this->consolePath;
+        $processParts[] = $cronJob->getCommand();
+
+        return new Process($processParts);
     }
 
     /**

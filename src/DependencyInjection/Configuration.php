@@ -30,6 +30,9 @@ class Configuration implements ConfigurationInterface
         $cronjobExecutionTimeZoneNode = new ScalarNodeDefinition('execution_time_zone');
         $cronjobExecutionTimeZoneNode->defaultNull();
 
+        $cronjobPhpExecutablePathNode = new ScalarNodeDefinition('php_executable_path');
+        $cronjobPhpExecutablePathNode->defaultNull();
+
         $cronjobLockPrefixNode = new ScalarNodeDefinition('lock_prefix');
         $cronjobLockPrefixNode->defaultValue('');
 
@@ -40,6 +43,7 @@ class Configuration implements ConfigurationInterface
         $rootNode->append($cronjobCheckIntervalNode);
         $rootNode->append($cronjobExecutionTimeZoneNode);
         $rootNode->append($cronjobLockPrefixNode);
+        $rootNode->append($cronjobPhpExecutablePathNode);
 
         return $treeBuilder;
     }

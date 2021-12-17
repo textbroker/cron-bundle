@@ -233,4 +233,64 @@ class DoctrineCronJobServiceTest extends TestCase
 
         self::assertSame($expectedScheduledJobs, $scheduledJobs);
     }
+
+    /**
+     * @return array[]
+     */
+    public function provideCreateProcess(): array
+    {
+        $job = new Mh1CronJob();
+        $job->setCommand('app:test:runner');
+
+        return [
+            'without path'     => ['', null, $job, '"" \'app:test:runner\''],
+            'without php path' => [
+                '/var/www/app/bin/console',
+                null,
+                $job,
+                '\'/var/www/app/bin/console\' \'app:test:runner\''
+            ],
+            'without empty php path' => [
+                '/var/www/app/bin/console',
+                '',
+                $job,
+                '\'/var/www/app/bin/console\' \'app:test:runner\''
+            ],
+            'php path'         => [
+                '/var/www/app/bin/console',
+                '/usr/local/php81/bin/php',
+                $job,
+                '\'/usr/local/php81/bin/php\' \'/var/www/app/bin/console\' \'app:test:runner\''
+            ],
+        ];
+    }
+
+    /**
+     * @dataProvider provideCreateProcess
+     *
+     * @param string      $consolePath
+     * @param string|null $phpPath
+     * @param Mh1CronJob  $cronJob
+     * @param string      $expectedPath
+     */
+    public function testCreateProcess(
+        string     $consolePath,
+        ?string    $phpPath,
+        Mh1CronJob $cronJob,
+        string     $expectedPath
+    ): void {
+        $cronJobLogServiceMock = $this->createMock(CronJobLogServiceInterface::class);
+        $service = new DoctrineCronJobService(
+            $cronJobLogServiceMock,
+            $this->entityManagerMock,
+            $consolePath,
+            1000,
+            $this->executionTimeZone,
+            $phpPath
+        );
+
+        $process = $service->createProcess($cronJob);
+
+        self::assertSame($expectedPath, $process->getCommandLine());
+    }
 }

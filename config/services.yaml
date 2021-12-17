@@ -21,6 +21,7 @@ services:
       $cronJobLogService: '@mh1.cronjob.log.service'
       $checkInterval: '%cronjob.check_interval%'
       $executionTimeZone: '%cronjob.execution_time_zone%'
+      $phpExecutablePath: '%cronjob.php_executable_path%'
 
   MH1\CronBundle\Command\CronRunCommand:
     arguments:

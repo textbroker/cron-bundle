@@ -137,6 +137,7 @@ mh1_cron:
     check_interval: 1000 # milliseconds to wait between the checks if a process is running (must be greater than 1)
     execution_time_zone: null # use a custom time zone for job scheduling, the default is the PHP default timezone
     lock_prefix: '' # use a prefix for cronjob logging, the default is empty string
+    php_executable_path: null # use a custom path to php executable. e.g. /usr/local/php81/bin/php
 ```
 
 #### Custom job service
@@ -190,4 +191,12 @@ this parameter to prefix the name of the locks, e.g. `instance1:app:run`, `insta
 # config/packages/mh1_cron.yaml
 mh1_cron:
     lock_prefix: 'second_instance'
+```
+
+#### Use a custom path to php executable
+
+```yaml
+# config/packages/mh1_cron.yaml
+mh1_cron:
+    php_executable_path: '/usr/local/php81/bin/php'
 ```

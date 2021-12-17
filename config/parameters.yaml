@@ -4,3 +4,4 @@ parameters:
   cronjob.check_interval: 1000
   cronjob.execution_time_zone: null
   cronjob.lock_prefix: ''
+  cronjob.php_executable_path: null

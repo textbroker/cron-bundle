@@ -53,6 +53,11 @@ class MH1CronExtension extends Extension implements PrependExtensionInterface
         if (isset($config['lock_prefix'])) {
             $container->setParameter('cronjob.lock_prefix', $config['lock_prefix']);
         }
+
+        // overwrite parameter, if set
+        if (isset($config['php_executable_path'])) {
+            $container->setParameter('cronjob.php_executable_path', $config['php_executable_path']);
+        }
     }
 
     public function prepend(ContainerBuilder $container): void

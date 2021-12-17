@@ -29,10 +29,11 @@ class DoctrineCronJobService extends AbstractCronJobService
         EntityManagerInterface     $entityManager,
         string                     $consolePath,
         int                        $checkInterval,
-        ?string                    $executionTimeZone = null
+        ?string                    $executionTimeZone = null,
+        ?string                    $phpExecutablePath = null
     ) {
         $this->entityManager = $entityManager;
-        parent::__construct($cronJobLogService, $consolePath, $checkInterval, $executionTimeZone);
+        parent::__construct($cronJobLogService, $consolePath, $checkInterval, $executionTimeZone, $phpExecutablePath);
     }
 
     /**
