@@ -5,7 +5,6 @@ namespace MH1\CronBundle\Command;
 
 use MH1\CronBundle\Service\CronCommandHelperServiceInterface;
 use Symfony\Component\Console\Command\Command;
-use Symfony\Component\Console\Command\LockableTrait;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
@@ -16,8 +15,6 @@ use Symfony\Component\Console\Output\OutputInterface;
 abstract class AbstractCronCommand extends Command
 {
     public const SKIPPED = 19;
-
-    use LockableTrait;
 
     /**
      * @var CronCommandHelperServiceInterface
@@ -44,11 +41,11 @@ abstract class AbstractCronCommand extends Command
     {
         $name = $this->getName() ?? '';
         // if command lock can be acquired => not running currently
-        if ($this->lock($this->helperService->getLockName($name))) {
+        if ($this->helperService->lockCommand($name)) {
             return $this->executeCronCommand($input, $output);
         }
 
-        return $this->helperService->commandIsLocked($output, $name);
+        return $this->helperService->trackCommandIsLocked($output, $name);
     }
 
     /**
