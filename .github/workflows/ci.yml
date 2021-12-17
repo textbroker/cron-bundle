@@ -36,16 +36,6 @@ jobs:
       - name: Run phpstan
         run: composer run-script phpstan
 
-      - name: Run test suite
-        run: composer run-script test-coverage
-
-      - name: phpunit-coverage-badge
-        uses: timkrase/phpunit-coverage-badge@v1.2.0
-        with:
-          repo_token: "${{ secrets.GITHUB_TOKEN }}"
-          push_badge: true
-          coverage_badge_path: docs/coverage_badge.svg
-
   test:
     runs-on: ubuntu-latest
     strategy:
