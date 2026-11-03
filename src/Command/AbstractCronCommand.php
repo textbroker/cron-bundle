@@ -25,7 +25,7 @@ abstract class AbstractCronCommand extends Command
      * @param CronCommandHelperServiceInterface $helperService
      * @param string|null                       $name
      */
-    public function __construct(CronCommandHelperServiceInterface $helperService, string $name = null)
+    public function __construct(CronCommandHelperServiceInterface $helperService, ?string $name = null)
     {
         parent::__construct($name);
         $this->helperService = $helperService;

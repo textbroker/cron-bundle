@@ -9,55 +9,52 @@ use MH1\CronBundle\Model\CronJobInterface;
 use MH1\CronBundle\Model\CronJobReportInterface;
 use MH1\CronBundle\Repository\Mh1CronJobReportRepository;
 
-/**
- * @ORM\Entity(repositoryClass=Mh1CronJobReportRepository::class)
- */
+#[ORM\Entity(repositoryClass: Mh1CronJobReportRepository::class)]
 class Mh1CronJobReport implements CronJobReportInterface
 {
     /**
      * @var int
-     *
-     * @ORM\Column(type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
      */
+    #[ORM\Column(type: 'integer')]
+    #[ORM\Id]
+    #[ORM\GeneratedValue(strategy: 'IDENTITY')]
     private $id;
 
     /**
      * @var CronJobInterface
-     * @ORM\ManyToOne(targetEntity=Mh1CronJob::class, inversedBy="cronJobReports", cascade={"persist", "remove"})
-     * @ORM\JoinColumn(nullable=false)
      */
+    #[ORM\ManyToOne(targetEntity: Mh1CronJob::class, inversedBy: 'cronJobReports', cascade: ['persist', 'remove'])]
+    #[ORM\JoinColumn(nullable: false)]
     private $cronJob;
 
     /**
      * @var DateTimeInterface
-     * @ORM\Column(type="datetime")
      */
+    #[ORM\Column(type: 'datetime')]
     private $startTime;
 
     /**
      * @var DateTimeInterface|null
-     * @ORM\Column(type="datetime", nullable=true)
      */
+    #[ORM\Column(type: 'datetime', nullable: true)]
     private $endTime;
 
     /**
      * @var int|null
-     * @ORM\Column(type="integer", nullable=true)
      */
+    #[ORM\Column(type: 'integer', nullable: true)]
     private $exitCode;
 
     /**
      * @var string|null
-     * @ORM\Column(type="text", nullable=true)
      */
+    #[ORM\Column(type: 'text', nullable: true)]
     private $output;
 
     /**
      * @var int|null
-     * @ORM\Column(type="integer", nullable=true)
      */
+    #[ORM\Column(type: 'integer', nullable: true)]
     private $duration;
 
     /**
