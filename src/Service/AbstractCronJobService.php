@@ -48,7 +48,7 @@ abstract class AbstractCronJobService implements CronJobServiceInterface
      *                                                      process is running (must be greater than 10)
      * @param string|null                $executionTimeZone name of the timezone to check for the runtime
      *                                                      if null php default timezone is used
-     * @param string|null                $phpExecutablePath path to php executable e.g. /usr/local/php81/bin/php
+     * @param string|null                $phpExecutablePath path to php executable e.g. /usr/local/php/bin/php
      *                                                      usefully if multiple PHP versions running on the same system
      */
     public function __construct(
