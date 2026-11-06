@@ -8,7 +8,7 @@ use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Lock\LockFactory;
-use Symfony\Component\Lock\LockInterface;
+use Symfony\Component\Lock\SharedLockInterface;
 
 class CronCommandHelperServiceTest extends TestCase
 {
@@ -57,8 +57,8 @@ class CronCommandHelperServiceTest extends TestCase
 
     public function testLockCommand(): void
     {
-        /** @var LockInterface|MockObject $lock */
-        $lock = $this->createMock(LockInterface::class);
+        /** @var SharedLockInterface|MockObject $lock */
+        $lock = $this->createMock(SharedLockInterface::class);
         $lock->expects(self::once())
              ->method('acquire')
              ->willReturn(true)
@@ -76,15 +76,14 @@ class CronCommandHelperServiceTest extends TestCase
 
     public function testReleaseCommand(): void
     {
-        /** @var LockInterface|MockObject $lock */
-        $lock = $this->createMock(LockInterface::class);
+        /** @var SharedLockInterface|MockObject $lock */
+        $lock = $this->createMock(SharedLockInterface::class);
         $lock->expects(self::once())
              ->method('acquire')
              ->willReturn(true)
         ;
         $lock->expects(self::once())
              ->method('release')
-             ->willReturn(true)
         ;
 
         $this->lockMock

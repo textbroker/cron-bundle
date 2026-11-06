@@ -258,9 +258,9 @@ class DoctrineCronJobServiceTest extends TestCase
             ],
             'php path'         => [
                 '/var/www/app/bin/console',
-                '/usr/local/php81/bin/php',
+                '/usr/local/php/bin/php',
                 $job,
-                '\'/usr/local/php81/bin/php\' \'/var/www/app/bin/console\' \'app:test:runner\''
+                '\'/usr/local/php/bin/php\' \'/var/www/app/bin/console\' \'app:test:runner\''
             ],
         ];
     }

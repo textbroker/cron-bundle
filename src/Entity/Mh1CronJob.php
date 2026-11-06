@@ -11,73 +11,63 @@ use MH1\CronBundle\Repository\Mh1CronJobRepository;
 use Ramsey\Uuid\Doctrine\UuidGenerator;
 use Ramsey\Uuid\UuidInterface;
 
-/**
- * @ORM\Entity(repositoryClass=Mh1CronJobRepository::class)
- */
+#[ORM\Entity(repositoryClass: Mh1CronJobRepository::class)]
 class Mh1CronJob implements CronJobInterface
 {
     /**
      * @var UuidInterface
-     *
-     * @ORM\Id
-     * @ORM\Column(type="uuid", unique=true)
-     * @ORM\GeneratedValue(strategy="CUSTOM")
-     * @ORM\CustomIdGenerator(class=UuidGenerator::class)
      */
+    #[ORM\Id]
+    #[ORM\Column(type: 'uuid', unique: true)]
+    #[ORM\GeneratedValue(strategy: 'CUSTOM')]
+    #[ORM\CustomIdGenerator(class: UuidGenerator::class)]
     private $id;
 
     /**
      * @var string
-     *
-     * @ORM\Column(type="string")
      */
+    #[ORM\Column(type: 'string')]
     private $title;
 
     /**
      * @var string|null
-     *
-     * @ORM\Column(type="string", nullable=true)
      */
+    #[ORM\Column(type: 'string', nullable: true)]
     private $description;
 
     /**
      * @var string
-     *
-     * @ORM\Column(type="string")
      */
+    #[ORM\Column(type: 'string')]
     private $command;
 
     /**
      * @var bool
-     *
-     * @ORM\Column(type="boolean")
      */
+    #[ORM\Column(type: 'boolean')]
     private $enabled;
 
     /**
      * @var string
-     *
-     * @ORM\Column(type="string")
      */
+    #[ORM\Column(type: 'string')]
     private $schedule;
 
     /**
      * @var bool
-     *
-     * @ORM\Column(type="boolean")
      */
+    #[ORM\Column(type: 'boolean')]
     private $executeStalled;
 
     /**
      * @var Collection<int, Mh1CronJobReport>
-     *
-     * @ORM\OneToMany(
-     *     targetEntity=Mh1CronJobReport::class,
-     *     mappedBy="cronJob",
-     *     orphanRemoval=true,
-     *     cascade={"persist", "remove"}
-     * )
      */
+    #[ORM\OneToMany(
+        targetEntity: Mh1CronJobReport::class,
+        mappedBy: 'cronJob',
+        orphanRemoval: true,
+        cascade: ['persist', 'remove']
+    )]
     private $reports;
 
     public function __construct()

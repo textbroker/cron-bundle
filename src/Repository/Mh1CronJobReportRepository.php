@@ -3,7 +3,6 @@ declare(strict_types=1);
 
 namespace MH1\CronBundle\Repository;
 
-use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\NonUniqueResultException;
 use MH1\CronBundle\Entity\Mh1CronJob;
@@ -25,7 +24,7 @@ class Mh1CronJobReportRepository extends EntityRepository
         return $this->createQueryBuilder('cjr')
                     ->andWhere('cjr.cronJob = :cronJob')
                     ->setParameter('cronJob', $cronJob)
-                    ->orderBy('cjr.endTime', Criteria::DESC)
+                    ->orderBy('cjr.endTime', 'DESC')
                     ->setMaxResults(1)
                     ->getQuery()
                     ->getOneOrNullResult()

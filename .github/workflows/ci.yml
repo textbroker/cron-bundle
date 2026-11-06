@@ -17,15 +17,15 @@ jobs:
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
         with:
-          php-version: 7.3
+          php-version: 8.2
 
       - name: Cache Composer packages
         id: composer-cache
         uses: actions/cache@v2
         with:
           path: vendor
-          key: php-7.3
-          restore-keys: php-7.3
+          key: php-8.2
+          restore-keys: php-8.2
 
       - name: Install dependencies
         run: composer install --no-progress
@@ -40,7 +40,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        php-versions: [ '7.2', '7.3', '7.4', '8.0' ]
+        php-versions: [ '8.2' ]
         composer-modifier: [ '--prefer-lowest', '--prefer-stable', '' ]
 
     steps:

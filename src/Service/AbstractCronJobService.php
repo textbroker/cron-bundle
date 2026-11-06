@@ -10,7 +10,6 @@ use MH1\CronBundle\Helper\DateTimeHelper;
 use MH1\CronBundle\Model\CronJobInterface;
 use MH1\CronBundle\Model\CronJobProcess;
 use Symfony\Component\Console\Command\Command;
-use Symfony\Component\Process\Exception\LogicException;
 use Symfony\Component\Process\Exception\RuntimeException;
 use Symfony\Component\Process\Process;
 
@@ -48,7 +47,7 @@ abstract class AbstractCronJobService implements CronJobServiceInterface
      *                                                      process is running (must be greater than 10)
      * @param string|null                $executionTimeZone name of the timezone to check for the runtime
      *                                                      if null php default timezone is used
-     * @param string|null                $phpExecutablePath path to php executable e.g. /usr/local/php81/bin/php
+     * @param string|null                $phpExecutablePath path to php executable e.g. /usr/local/php/bin/php
      *                                                      usefully if multiple PHP versions running on the same system
      */
     public function __construct(
@@ -86,7 +85,7 @@ abstract class AbstractCronJobService implements CronJobServiceInterface
             $process = $this->createProcess($cronJob);
             try {
                 $process->start();
-            } catch (RuntimeException|LogicException $exception) {
+            } catch (RuntimeException $exception) {
                 $this->cronJobLogService->logEnd($log, Command::FAILURE, $exception->getMessage());
                 continue;
             }
@@ -119,7 +118,7 @@ abstract class AbstractCronJobService implements CronJobServiceInterface
      *
      * @return CronJobInterface[]
      */
-    public function getScheduledJobs(DateTimeInterface $scheduleDateTime = null): array
+    public function getScheduledJobs(?DateTimeInterface $scheduleDateTime = null): array
     {
         $scheduleDateTime = $scheduleDateTime ?? DateTimeHelper::getUTCDateTimeImmutable();
         $enabledJobs = $this->getEnabledJobs();

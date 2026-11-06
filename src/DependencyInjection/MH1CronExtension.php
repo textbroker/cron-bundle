@@ -71,6 +71,7 @@ class MH1CronExtension extends Extension implements PrependExtensionInterface
 
         $filePath = __DIR__ . '/../../config/packages/doctrine.yaml';
         $config = Yaml::parseFile($filePath);
+        $config['doctrine']['orm']['mappings']['MH1CronBundle']['dir'] = \dirname(__DIR__) . '/Entity';
         $container->prependExtensionConfig('doctrine', $config['doctrine']);
     }
 }

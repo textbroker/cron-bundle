@@ -10,7 +10,7 @@
         <server name="APP_ENV" value="test" force="true"/>
         <server name="SHELL_VERBOSITY" value="-1"/>
         <server name="SYMFONY_PHPUNIT_REMOVE" value=""/>
-        <server name="SYMFONY_PHPUNIT_VERSION" value="8.5"/>
+        <server name="SYMFONY_PHPUNIT_VERSION" value="9.6"/>
     </php>
 
     <testsuites>
@@ -19,15 +19,15 @@
         </testsuite>
     </testsuites>
 
-    <filter>
-        <whitelist processUncoveredFilesFromWhitelist="true">
+    <coverage processUncoveredFiles="true">
+        <include>
             <directory suffix=".php">src</directory>
-            <exclude>
-                <file>src/MH1CronBundle.php</file>
-                <directory suffix=".php">src/DependencyInjection</directory>
-            </exclude>
-        </whitelist>
-    </filter>
+        </include>
+        <exclude>
+            <file>src/MH1CronBundle.php</file>
+            <directory suffix=".php">src/DependencyInjection</directory>
+        </exclude>
+    </coverage>
 
     <listeners>
         <listener class="Symfony\Bridge\PhpUnit\SymfonyTestsListener"/>
